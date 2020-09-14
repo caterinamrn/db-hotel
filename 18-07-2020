@@ -1,0 +1,43 @@
+GROUP BY 
+- SELECT year(date_of_birth) ,COUNT(*) FROM ospiti GROUP BY year(date_of_birth)
+
+-SELECT status, SUM(price) FROM pagamenti GROUP BY status
+
+-SELECT stanza_id, COUNT(*) FROM prenotazioni GROUP BY stanza_id
+
+- SELECT HOUR(created_at), COUNT(*) FROM `prenotazioni` GROUP BY HOUR(created_at)
+
+JOIN 
+-SELECT prenotazioni_has_ospiti.ospite_id, ospiti.name, COUNT(*)
+FROM prenotazioni_has_ospiti
+JOIN  ospiti ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+GROUP BY prenotazioni_has_ospiti.ospite_id
+HAVING COUNT(ospiti.id) > 1
+
+-SELECT prenotazioni_has_ospiti.ospite_id , ospiti.name, ospiti.lastname, ospiti.id, COUNT(*)
+FROM prenotazioni_has_ospiti
+JOIN ospiti ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+GROUP BY prenotazioni_has_ospiti.ospite_id
+WHERE MONTH(prenotazioni.created_at) = 05 AND YEAR(prenotazioni.created_at) = 2018
+
+-SELECT SUM(pagamenti.price)
+FROM pagamenti
+JOIN prenotazioni
+    ON prenotazioni.id = pagamenti.prenotazione_id
+JOIN stanze
+    ON prenotazioni.stanza_id = stanze.id
+WHERE stanze.floor = 1
+
+-SELECT pagamenti.*, paganti.name, paganti.lastname
+FROM pagamenti
+JOIN prenotazioni
+    ON pagamenti.prenotazione_id = prenotazioni.id
+JOIN paganti
+    ON pagamenti.pagante_id = paganti.id
+WHERE prenotazioni.id = 7
+
+-SELECT stanze.*
+FROM stanze 
+LEFT JOIN prenotazioni
+ON stanze.id = prenotazioni.stanza_id
+WHERE prenotazioni.stanza_id IS NULL
